@@ -1,3 +1,6 @@
+pip install Office365-REST-Python-Client
+
+
 For Power Automate Desktop:
 	1.	Add the “Run Python script” or “Run a command line script” action.
 2.	Set the command:

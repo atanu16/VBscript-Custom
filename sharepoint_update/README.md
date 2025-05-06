@@ -23,3 +23,10 @@ python "C:\Path\To\update_sharepoint.py" "Creation" "Blum" "8TI" "7IK" "Complete
 3.	Ensure:
 	•	Python is installed and available in environment variables.
 	•	Bot runner has access to the script and SharePoint.
+
+
+
+Install-Module PnP.PowerShell -Scope CurrentUser -Force
+
+Install-Module -Name PnP.PowerShell -Force -AllowClobber
+

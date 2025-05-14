@@ -24,10 +24,11 @@ spUser = InputBox("Enter your SharePoint username (e.g., user@domain.com):", "Sh
 spPass = InputBox("Enter your SharePoint password:", "SharePoint Login")
 
 '=== Log File Setup ===
-Dim logFile, fso, log
 Set fso = CreateObject("Scripting.FileSystemObject")
-logFile = "sharepoint_log.txt"
-Set log = fso.OpenTextFile(logFile, 8, True) ' Append mode
+If Not fso.FolderExists("C:\Temp") Then fso.CreateFolder("C:\Temp")
+logFile = "C:\Temp\sharepoint_log.txt"
+Set log = fso.OpenTextFile(logFile, 8, True)
+
 
 Call LogWrite("==== SharePoint Sync Started ====")
 

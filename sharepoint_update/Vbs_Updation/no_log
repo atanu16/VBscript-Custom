@@ -9,22 +9,22 @@ machine   = "MININT-R37IK"
 runDate   = "05/02/2025"
 startTime = "2:00 PM"
 endTime   = "4:00 PM"
-status    = "InProgress" ' OR "Completed"
+status    = "InProgress"
 region    = "Portugal"
 
 '=== SharePoint Setup ===
 Dim listName, sharepointURL, soapAction, xmlhttp, soapEnvelope, existingItemID
 listName = "Temp"
-sharepointURL = "https://bungetld.sharepoint.com/sites/Dev16/_vti_bin/Lists.asmx"
+sharepointURL = "https://Yoursite.com/sites/Dev16/_vti_bin/Lists.asmx"
 soapAction = "http://schemas.microsoft.com/sharepoint/soap/"
 
-'=== Prompt for credentials if needed ===
+'=== Prompt for credentials ===
 Dim spUser, spPass
 spUser = InputBox("Enter your SharePoint username (e.g., user@domain.com):", "SharePoint Login")
 spPass = InputBox("Enter your SharePoint password:", "SharePoint Login")
 
 '=== Step 1: Check existing item ===
-Set xmlhttp = CreateObject("MSXML2.XMLHTTP.6.0")
+Set xmlhttp = CreateObject("WinHttp.WinHttpRequest.5.1")
 soapEnvelope = _
 "<?xml version='1.0' encoding='utf-8'?>" & _
 "<soap:Envelope xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' " & _
@@ -45,7 +45,7 @@ SendRequest xmlhttp, sharepointURL, soapAction & "GetListItems", soapEnvelope, s
 Dim xmlDoc, nodes, node, statusValue
 Set xmlDoc = CreateObject("MSXML2.DOMDocument")
 xmlDoc.async = False
-xmlDoc.LoadXML(xmlhttp.responseText)
+xmlDoc.LoadXML(xmlhttp.ResponseText)
 
 Set nodes = xmlDoc.getElementsByTagName("z:row")
 
@@ -63,16 +63,13 @@ Else
     UpdateOrInsertItem "New", ""
 End If
 
-Set xmlhttp = Nothing
-Set xmlDoc = Nothing
-
-MsgBox "✅ Script completed successfully."
+MsgBox "✅ SharePoint sync complete."
 
 '==================== Subroutines ====================
 
 Sub UpdateOrInsertItem(cmd, itemID)
     Dim req, env
-    Set req = CreateObject("MSXML2.XMLHTTP.6.0")
+    Set req = CreateObject("WinHttp.WinHttpRequest.5.1")
     env = "<?xml version='1.0' encoding='utf-8'?>" & _
     "<soap:Envelope xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' " & _
     "xmlns:xsd='http://www.w3.org/2001/XMLSchema' " & _
@@ -99,9 +96,9 @@ End Sub
 
 Sub SendRequest(obj, url, action, body, user, pass)
     obj.Open "POST", url, False
-    obj.setRequestHeader "Content-Type", "text/xml; charset=utf-8"
-    obj.setRequestHeader "SOAPAction", action
-    obj.setRequestHeader "Authorization", "Basic " & Base64Encode(user & ":" & pass)
+    obj.SetRequestHeader "Content-Type", "text/xml; charset=utf-8"
+    obj.SetRequestHeader "SOAPAction", action
+    obj.SetRequestHeader "Authorization", "Basic " & Base64Encode(user & ":" & pass)
     obj.Send body
 End Sub
 
